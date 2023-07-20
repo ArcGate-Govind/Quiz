@@ -40,8 +40,6 @@ body{
 .button{
    
     margin: 20px;
-    transition-property: width;
-    transition-duration: 2s;
 }
 .main-button{
     padding: 8px 20px 8px 20px;
@@ -54,7 +52,6 @@ body{
 }
 .main-button:hover{
     background-color: darkseagreen;
-    width: 300px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
     color: black;
 }
@@ -68,5 +65,49 @@ body{
         margin: 10px 40px 10px 40px; 
     }
   }
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 
+  .modal-content {
+    background-color:lightsalmon;
+    color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 400px;
+  }
+
+  /* Form styles */
+  input[type="text"],
+  input[type="email"],
+  input[type="submit"] {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+  }
+
+  .error {
+    color: red;
+  }
+  #user{
+    display: flex;
+    justify-content: end;
+    margin: 20px;
+  }
+  .btn{
+    display: flex;
+    justify-content: space-between;
+  }
 
