@@ -32,9 +32,9 @@ const Qusestion = [
     correct: "b",
   },
 ];
+
 const quiz = document.getElementById("maincontainer1");
 const answers = document.querySelectorAll(".answer");
-console.log(answers);
 const Qussss = document.getElementById("question");
 const firstAns = document.getElementById("firstAns");
 const secondAns = document.getElementById("secondAns");
@@ -49,7 +49,7 @@ previousButton.addEventListener("click", () => {
   score--;
   localStorage.setItem("currentQus", currentQus);
   document.getElementById("currentQusno").innerHTML =
-    Number(localStorage.getItem("currentQus")) + 1;
+  Number(localStorage.getItem("currentQus")) + 1;
   //answer === Qusestion[currentQus].correct
 
   if (currentQus >= 0) {
@@ -70,12 +70,6 @@ previousButton.addEventListener("click", () => {
           break;
       }
     }
-    // answers.forEach((ckeckBox) => {
-    //   if(ckeckBox.id == localStorage.getItem('answer'+currentQus))
-    //  return answers.checked = true;
-    // });
-
-    //answers[currentQus].checked = true;
   } else {
     currentQus = 0;
   }
@@ -83,8 +77,8 @@ previousButton.addEventListener("click", () => {
 
 let currentQus = 0;
 if (localStorage.getItem("currentQus") != undefined) {
-  document.getElementById("currentQusno").innerHTML =
-    Number(localStorage.getItem("currentQus")) + 1;
+   document.getElementById("currentQusno").innerHTML =
+  Number(localStorage.getItem("currentQus")) + 1;
   currentQus = localStorage.getItem("currentQus");
 } else {
   document.getElementById("currentQusno").innerHTML = 1;
@@ -127,7 +121,7 @@ function add() {
 }
 button.addEventListener("click", () => {
   const answer = add();
-  console.log(answer,"nn");
+  console.log(answer, "nn");
   if (answer) {
     localStorage.setItem("answer" + currentQus, answer);
     if (answer === Qusestion[currentQus].correct) {
@@ -138,7 +132,7 @@ button.addEventListener("click", () => {
 
     if (currentQus < Qusestion.length) {
       localStorage.setItem("currentQus", currentQus);
-      console.log(currentQus,"bb");
+      console.log(currentQus, "bb");
       document.getElementById("currentQusno").innerHTML =
         Number(localStorage.getItem("currentQus")) + 1;
       setCheck();
@@ -159,14 +153,29 @@ button.addEventListener("click", () => {
         }
       }
     } else {
+       let usersData = [{
+        username:localStorage.getItem('username'),
+        email:localStorage.getItem('email'),
+        score:localStorage.getItem('score')
+      }];
+      if(localStorage.getItem('usersData'))
+        localStorage.setItem('usersData',JSON.stringify(JSON.parse(localStorage.getItem('usersData')).concat(usersData)))
+        else
+        localStorage.setItem('usersData',[JSON.stringify(usersData)])
       quiz.innerHTML = `
            <h2>Your answered ${score}/${Qusestion.length} questions correctly</h2>
            <button  class="main-button button" onclick="reloadPage()">Reload</button>
            `;
-           localStorage.setItem("lastscore",score)
-           let string = JSON.stringify(score)
-           localStorage.setItem("socreall", string,"username","email")
-          
+      JSON.parse(localStorage.getItem('usersData')).forEach((user)=>{
+        var row = document.getElementById("table-body").insertRow(0);
+        row.insertCell(0).innerHTML = user.username;
+        row.insertCell(1).innerHTML = user.email;
+        row.insertCell(2).innerHTML = user.score;
+      })
+      document.getElementById('users-table').style.display = 'inline'
+      localStorage.setItem("lastscore", score);
+      let string = JSON.stringify(score);
+      localStorage.setItem("socreall", string, "username", "email");
     }
   }
 });
@@ -178,6 +187,8 @@ function reloadPage() {
   localStorage.removeItem("username");
   localStorage.removeItem("email");
   localStorage.removeItem("score");
+  if(JSON.parse(localStorage.getItem('usersData')).length>=10)
+  localStorage.removeItem('usersData');
   location.reload();
 }
 const modal = document.getElementById("myModal");
@@ -226,6 +237,12 @@ function handleSubmit(event) {
 
   localStorage.setItem("username", username);
   localStorage.setItem("email", email);
+  if(JSON.parse(localStorage.getItem('usersData'))){
+if(localStorage.getItem('usersData').includes(email)){
+  emailError.textContent = `${email} emal is alredy exist";`
+  return;
+}
+  }
   hideModal();
 }
 
