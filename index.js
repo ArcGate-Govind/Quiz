@@ -70,15 +70,24 @@ previousButton.addEventListener("click", () => {
           break;
       }
     }
+    // answers.forEach((ckeckBox) => {
+    //   if(ckeckBox.id == localStorage.getItem('answer'+currentQus))
+    //  return answers.checked = true;
+    // });
+
+    //answers[currentQus].checked = true;
   } else {
     currentQus = 0;
   }
 });
 
 let currentQus = 0;
+if(localStorage.getItem("isEndQuiz")){
+showEndPage();
+}
 if (localStorage.getItem("currentQus") != undefined) {
-   document.getElementById("currentQusno").innerHTML =
-  Number(localStorage.getItem("currentQus")) + 1;
+  document.getElementById("currentQusno").innerHTML =
+    Number(localStorage.getItem("currentQus")) + 1;
   currentQus = localStorage.getItem("currentQus");
 } else {
   document.getElementById("currentQusno").innerHTML = 1;
@@ -129,7 +138,6 @@ button.addEventListener("click", () => {
       localStorage.setItem("score", score);
     }
     currentQus++;
-
     if (currentQus < Qusestion.length) {
       localStorage.setItem("currentQus", currentQus);
       console.log(currentQus, "bb");
@@ -153,6 +161,7 @@ button.addEventListener("click", () => {
         }
       }
     } else {
+      localStorage.setItem('isEndQuiz','true')
        let usersData = [{
         username:localStorage.getItem('username'),
         email:localStorage.getItem('email'),
@@ -177,6 +186,8 @@ button.addEventListener("click", () => {
       let string = JSON.stringify(score);
       localStorage.setItem("socreall", string, "username", "email");
     }
+  }else{
+    localStorage.setItem("score", score);
   }
 });
 function reloadPage() {
@@ -187,6 +198,7 @@ function reloadPage() {
   localStorage.removeItem("username");
   localStorage.removeItem("email");
   localStorage.removeItem("score");
+  localStorage.removeItem('isEndQuiz')
   if(JSON.parse(localStorage.getItem('usersData')).length>=10)
   localStorage.removeItem('usersData');
   location.reload();
@@ -212,6 +224,21 @@ function validateUsername(username) {
 function validateEmail(email) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
+}
+
+function showEndPage(){
+  let score = localStorage.getItem('score')
+  quiz.innerHTML = `
+  <h2>Your answered ${score}/${Qusestion.length} questions correctly</h2>
+  <button  class="main-button button" onclick="reloadPage()">Reload</button>
+  `;
+JSON.parse(localStorage.getItem('usersData')).forEach((user)=>{
+var row = document.getElementById("table-body").insertRow(0);
+row.insertCell(0).innerHTML = user.username;
+row.insertCell(1).innerHTML = user.email;
+row.insertCell(2).innerHTML = user.score;
+})
+document.getElementById('users-table').style.display = 'inline'
 }
 
 function handleSubmit(event) {
